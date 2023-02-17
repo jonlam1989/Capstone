@@ -15,6 +15,7 @@ py4j==0.10.9.5
 pyparsing==3.0.9
 pyspark==3.3.1
 python-dateutil==2.8.2
+python-dotenv==0.21.1
 pytz==2022.7.1
 seaborn==0.12.2
 six==1.16.0

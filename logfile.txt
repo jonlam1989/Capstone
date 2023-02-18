@@ -6,3 +6,11 @@
 2023-Feb-17-19:54:08,Loading Started
 2023-Feb-17-19:54:08,Loading Ended
 2023-Feb-17-19:54:08,ETL Job Ended
+2023-Feb-17-20:08:56,Branch ETL Job Started
+2023-Feb-17-20:08:56,Branch Extraction Started
+2023-Feb-17-20:08:56,Branch Extraction Ended
+2023-Feb-17-20:08:56,Branch Transformation Started
+2023-Feb-17-20:08:56,Branch Transformation Ended
+2023-Feb-17-20:08:56,Branch Loading Started
+2023-Feb-17-20:08:57,Branch Loading Ended
+2023-Feb-17-20:08:57,Branch ETL Job Ended

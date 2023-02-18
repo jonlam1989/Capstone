@@ -1,0 +1,8 @@
+2023-Feb-17-19:54:07,ETL Job Started
+2023-Feb-17-19:54:07,Extraction Started
+2023-Feb-17-19:54:08,Extraction Ended
+2023-Feb-17-19:54:08,Transformation Started
+2023-Feb-17-19:54:08,Transformation Ended
+2023-Feb-17-19:54:08,Loading Started
+2023-Feb-17-19:54:08,Loading Ended
+2023-Feb-17-19:54:08,ETL Job Ended

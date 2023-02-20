@@ -1,0 +1,6 @@
+2023-Feb-19-21:18:45,Loan ETL Job Started
+2023-Feb-19-21:18:45,Loan Extraction Started
+2023-Feb-19-21:18:50,Loan Extraction Ended
+2023-Feb-19-21:18:50,Loan Loading Started
+2023-Feb-19-21:18:50,Loan Loading Ended
+2023-Feb-19-21:18:50,Loan ETL Job Ended

@@ -1,0 +1,27 @@
+.main {
+    display: flex;
+    justify-content: center;
+}
+
+.section {
+    width: 95%;
+    text-align: center;
+    font-family: 'Arial';
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.data {
+    width: 80%;
+}
+
+.data_sidebar {
+    max-width: '400px';
+}
+
+.data_sidebar #zipcode {
+    padding-left: 0.5rem;
+}

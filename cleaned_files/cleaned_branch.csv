@@ -1,0 +1,116 @@
+BRANCH_CODE,BRANCH_NAME,BRANCH_STREET,BRANCH_CITY,BRANCH_STATE,BRANCH_ZIP,BRANCH_PHONE,LAST_UPDATED
+1,Example Bank,Bridle Court,Lakeville,MN,55044,(781)123-3456,2018-04-18 16:51:47
+2,Example Bank,Washington Street,Huntley,IL,60142,(781)123-3461,2018-04-18 16:51:47
+3,Example Bank,Warren Street,SouthRichmondHill,NY,11419,(781)123-3498,2018-04-18 16:51:47
+4,Example Bank,Cleveland Street,Middleburg,FL,32068,(781)123-3466,2018-04-18 16:51:47
+5,Example Bank,14th Street,KingOfPrussia,PA,19406,(781)123-3484,2018-04-18 16:51:47
+7,Example Bank,Jefferson Street,Paterson,NJ,7501,(781)123-3414,2018-04-18 16:51:47
+8,Example Bank,B Street,Pittsford,NY,14534,(781)123-3467,2018-04-18 16:51:47
+9,Example Bank,Jefferson Court,Wethersfield,CT,6109,(781)123-3467,2018-04-18 16:51:47
+10,Example Bank,Cambridge Road,NorthOlmsted,OH,44070,(781)123-3414,2018-04-18 16:51:47
+11,Example Bank,3rd Street West,Hillsborough,NJ,8844,(781)123-3436,2018-04-18 16:51:47
+12,Example Bank,Mill Road,MadisonHeights,MI,48071,(781)123-3486,2018-04-18 16:51:47
+14,Example Bank,Washington Street,Oviedo,FL,32765,(781)123-3493,2018-04-18 16:51:47
+15,Example Bank,Chestnut Street,Mechanicsburg,PA,17050,(781)123-3446,2018-04-18 16:51:47
+16,Example Bank,Monroe Drive,Plainview,NY,11803,(781)123-3485,2018-04-18 16:51:47
+17,Example Bank,Railroad Street,Paducah,KY,42001,(781)123-3454,2018-04-18 16:51:47
+18,Example Bank,Church Street South,Harleysville,PA,19438,(781)123-3482,2018-04-18 16:51:47
+19,Example Bank,King Street,SilverSpring,MD,20901,(781)123-3448,2018-04-18 16:51:47
+20,Example Bank,Canterbury Drive,Burnsville,MN,55337,(781)123-3484,2018-04-18 16:51:47
+21,Example Bank,2nd Avenue,Tacoma,WA,98444,(781)123-3436,2018-04-18 16:51:47
+22,Example Bank,Front Street South,Carlisle,PA,17013,(781)123-3492,2018-04-18 16:51:47
+23,Example Bank,Highland Avenue,Duarte,CA,91010,(781)123-3446,2018-04-18 16:51:47
+24,Example Bank,Grove Street,Redford,MI,48239,(781)123-3461,2018-04-18 16:51:47
+25,Example Bank,Park Avenue,NewBaltimore,MI,48047,(781)123-3452,2018-04-18 16:51:47
+26,Example Bank,Chestnut Avenue,LakeJackson,TX,77566,(781)123-3435,2018-04-18 16:51:47
+27,Example Bank,Pin Oak Drive,WinstonSalem,NC,27103,(781)123-3483,2018-04-18 16:51:47
+28,Example Bank,3rd Street West,Midlothian,VA,23112,(781)123-3441,2018-04-18 16:51:47
+29,Example Bank,School Street,Glendora,CA,91740,(781)123-3478,2018-04-18 16:51:47
+30,Example Bank,Shady Lane,SouthLyon,MI,48178,(781)123-3491,2018-04-18 16:51:47
+31,Example Bank,Queen Street,Carrollton,GA,30117,(781)123-3414,2018-04-18 16:51:47
+32,Example Bank,Aspen Court,Helena,MT,59601,(781)123-3430,2018-04-18 16:51:47
+35,Example Bank,Durham Road,Loganville,GA,30052,(781)123-3431,2018-04-18 16:51:47
+36,Example Bank,Spruce Avenue,ElDorado,AR,71730,(781)123-3468,2018-04-18 16:51:47
+37,Example Bank,Lawrence Street,CapeCoral,FL,33904,(781)123-3477,2018-04-18 16:51:47
+38,Example Bank,7th Street,Starkville,MS,39759,(781)123-3481,2018-04-18 16:51:47
+39,Example Bank,Devonshire Drive,Grandville,MI,49418,(781)123-3420,2018-04-18 16:51:47
+40,Example Bank,Franklin Avenue,Jonesboro,GA,30236,(781)123-3429,2018-04-18 16:51:47
+42,Example Bank,Elmwood Avenue,Youngstown,OH,44512,(781)123-3423,2018-04-18 16:51:47
+43,Example Bank,Ashley Court,Houston,TX,77016,(781)123-3475,2018-04-18 16:51:47
+44,Example Bank,12th Street East,Greenville,NC,27834,(781)123-3473,2018-04-18 16:51:47
+45,Example Bank,Bayberry Drive,Wilmette,IL,60091,(781)123-3445,2018-04-18 16:51:47
+46,Example Bank,Jones Street,Levittown,NY,11756,(781)123-3494,2018-04-18 16:51:47
+47,Example Bank,Route 10,NewBerlin,WI,53151,(781)123-3487,2018-04-18 16:51:47
+48,Example Bank,Cedar Avenue,Bartlett,IL,60103,(781)123-3410,2018-04-18 16:51:47
+49,Example Bank,11th Street,Chambersburg,PA,17201,(781)123-3415,2018-04-18 16:51:47
+50,Example Bank,Fairway Drive,Granger,IN,46530,(781)123-3411,2018-04-18 16:51:47
+51,Example Bank,Route 20,Lombard,IL,60148,(781)123-3413,2018-04-18 16:51:47
+52,Example Bank,Fulton Street,ElPaso,TX,79930,(781)123-3424,2018-04-18 16:51:47
+53,Example Bank,Manor Drive,Dundalk,MD,21222,(781)123-3432,2018-04-18 16:51:47
+54,Example Bank,Oak Lane,RedondoBeach,CA,90278,(781)123-3445,2018-04-18 16:51:47
+56,Example Bank,State Street East,Rowlett,TX,75088,(781)123-3485,2018-04-18 16:51:47
+57,Example Bank,New Street,Hartsville,SC,29550,(781)123-3477,2018-04-18 16:51:47
+58,Example Bank,Hickory Street,Rossville,GA,30741,(781)123-3433,2018-04-18 16:51:47
+59,Example Bank,Country Lane,Waxhaw,NC,28173,(781)123-3484,2018-04-18 16:51:47
+60,Example Bank,Front Street,Richmond,VA,23223,(781)123-3452,2018-04-18 16:51:47
+63,Example Bank,York Street,Oxford,MS,38655,(781)123-3437,2018-04-18 16:51:47
+66,Example Bank,Winding Way,Syosset,NY,11791,(781)123-3465,2018-04-18 16:51:47
+67,Example Bank,Jackson Avenue,Baltimore,MD,21206,(781)123-3443,2018-04-18 16:51:47
+69,Example Bank,Amherst Street,Fenton,MI,48430,(781)123-3467,2018-04-18 16:51:47
+70,Example Bank,Briarwood Court,Medford,MA,2155,(781)123-3498,2018-04-18 16:51:47
+72,Example Bank,Essex Court,Stow,OH,44224,(781)123-3444,2018-04-18 16:51:47
+73,Example Bank,Maple Lane,Oconomowoc,WI,53066,(781)123-3484,2018-04-18 16:51:47
+74,Example Bank,Evergreen Drive,Dearborn,MI,48124,(781)123-3427,2018-04-18 16:51:47
+75,Example Bank,9th Street,Rockaway,NJ,7866,(781)123-3420,2018-04-18 16:51:47
+76,Example Bank,8th Avenue,WinterSprings,FL,32708,(781)123-3451,2018-04-18 16:51:47
+77,Example Bank,Grant Avenue,UpperMarlboro,MD,20772,(781)123-3448,2018-04-18 16:51:47
+78,Example Bank,Heather Court,Mundelein,IL,60060,(781)123-3416,2018-04-18 16:51:47
+79,Example Bank,George Street,Bettendorf,IA,52722,(781)123-3439,2018-04-18 16:51:47
+80,Example Bank,Court Street,Enterprise,AL,36330,(781)123-3422,2018-04-18 16:51:47
+81,Example Bank,Summer Street,Simpsonville,SC,29680,(781)123-3458,2018-04-18 16:51:47
+83,Example Bank,Creekside Drive,Brookfield,WI,53045,(781)123-3424,2018-04-18 16:51:47
+85,Example Bank,Brown Street,LaCrosse,WI,54601,(781)123-3478,2018-04-18 16:51:47
+89,Example Bank,Chapel Street,BuffaloGrove,IL,60089,(781)123-3475,2018-04-18 16:51:47
+90,Example Bank,Tanglewood Drive,Chillicothe,OH,45601,(781)123-3489,2018-04-18 16:51:47
+91,Example Bank,Lafayette Avenue,Davenport,IA,52804,(781)123-3475,2018-04-18 16:51:47
+93,Example Bank,Harrison Street,Poughkeepsie,NY,12601,(781)123-3488,2018-04-18 16:51:47
+95,Example Bank,Madison Street,Apopka,FL,32703,(781)123-3466,2018-04-18 16:51:47
+99,Example Bank,Bridge Street,Seymour,IN,47274,(781)123-3416,2018-04-18 16:51:47
+100,Example Bank,New Street,Wellington,FL,33414,(781)123-3480,2018-04-18 16:51:47
+103,Example Bank,Grant Street,SiouxCity,IA,51106,(781)123-3448,2018-04-18 16:51:47
+104,Example Bank,Cambridge Court,Owosso,MI,48867,(781)123-3490,2018-04-18 16:51:47
+105,Example Bank,Virginia Avenue,LongBranch,NJ,7740,(781)123-3472,2018-04-18 16:51:47
+107,Example Bank,Delaware Avenue,Defiance,OH,43512,(781)123-3446,2018-04-18 16:51:47
+109,Example Bank,Edgewood Drive,Ames,IA,50010,(781)123-3447,2018-04-18 16:51:47
+111,Example Bank,River Street,Kernersville,NC,27284,(781)123-3436,2018-04-18 16:51:47
+114,Example Bank,Madison Street,PalmCity,FL,34990,(781)123-3417,2018-04-18 16:51:47
+115,Example Bank,Jefferson Street,MurrellsInlet,SC,29576,(781)123-3490,2018-04-18 16:51:47
+117,Example Bank,Route 64,Canonsburg,PA,15317,(781)123-3419,2018-04-18 16:51:47
+118,Example Bank,Henry Street,Hanover,PA,17331,(781)123-3449,2018-04-18 16:51:47
+119,Example Bank,Fulton Street,Ashland,OH,44805,(781)123-3412,2018-04-18 16:51:47
+121,Example Bank,Warren Street,Oxnard,CA,93035,(781)123-3436,2018-04-18 16:51:47
+123,Example Bank,Willow Avenue,DeerfieldBeach,FL,33442,(781)123-3436,2018-04-18 16:51:47
+124,Example Bank,Bay Street,Osseo,MN,55311,(781)123-3413,2018-04-18 16:51:47
+125,Example Bank,Cambridge Court,AllisonPark,PA,15101,(781)123-3469,2018-04-18 16:51:47
+126,Example Bank,Route 10,Bethesda,MD,20814,(781)123-3472,2018-04-18 16:51:47
+131,Example Bank,Orchard Lane,Valrico,FL,33594,(781)123-3488,2018-04-18 16:51:47
+135,Example Bank,Canterbury Road,Nanuet,NY,10954,(781)123-3483,2018-04-18 16:51:47
+136,Example Bank,Route 11,Independence,KY,41051,(781)123-3460,2018-04-18 16:51:47
+139,Example Bank,Jefferson Street,SanLorenzo,CA,94580,(781)123-3454,2018-04-18 16:51:47
+144,Example Bank,Chestnut Avenue,NewPhiladelphia,OH,44663,(781)123-3463,2018-04-18 16:51:47
+145,Example Bank,6th Street West,Clermont,FL,34711,(781)123-3429,2018-04-18 16:51:47
+149,Example Bank,Route 27,Gettysburg,PA,17325,(781)123-3450,2018-04-18 16:51:47
+156,Example Bank,Adams Street,WestChester,PA,19380,(781)123-3454,2018-04-18 16:51:47
+158,Example Bank,Chestnut Avenue,Natchez,MS,39120,(781)123-3429,2018-04-18 16:51:47
+160,Example Bank,Beechwood Drive,GardenCity,NY,11530,(781)123-3469,2018-04-18 16:51:47
+164,Example Bank,Route 30,Yakima,WA,98908,(781)123-3454,2018-04-18 16:51:47
+166,Example Bank,Route 41,Conyers,GA,30012,(781)123-3493,2018-04-18 16:51:47
+168,Example Bank,Williams Street,YubaCity,CA,95993,(781)123-3431,2018-04-18 16:51:47
+170,Example Bank,Broadway,Irvington,NJ,7111,(781)123-3441,2018-04-18 16:51:47
+173,Example Bank,Victoria Court,Victoria,TX,77904,(781)123-3433,2018-04-18 16:51:47
+175,Example Bank,Garfield Avenue,FloralPark,NY,11001,(781)123-3484,2018-04-18 16:51:47
+178,Example Bank,8th Street West,Baldwin,NY,11510,(781)123-3461,2018-04-18 16:51:47
+180,Example Bank,Meadow Street,NewHaven,CT,6511,(781)123-3434,2018-04-18 16:51:47
+188,Example Bank,Lincoln Avenue,Quincy,MA,2169,(781)123-3425,2018-04-18 16:51:47
+192,Example Bank,Glenwood Drive,Lititz,PA,17543,(781)123-3493,2018-04-18 16:51:47
+197,Example Bank,Briarwood Drive,Acworth,GA,30101,(781)123-3491,2018-04-18 16:51:47

@@ -1,3 +1,19 @@
-.home {
+.app {
     font-family: Arial;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 0rem 1rem;
+    height: 50px;
+}
+
+.nav div {
+    display: flex;
+    align-items: center;
+}
+
+.nav a {
+    color: black;
 }

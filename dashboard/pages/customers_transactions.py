@@ -3,8 +3,9 @@ import pandas as pd
 
 import plotly.express as px 
 import plotly.graph_objects as go 
-from dash import Dash, dash_table, dcc, html, Input, Output
+
 import dash
+from dash import Dash, dash_table, dcc, html, Input, Output
 #----------------------------------------------------------------------------------------------------------
 # Used to display the transactions made by customers living in a given zip code for a given month and year. 
 # Order by day in descending order.
@@ -49,11 +50,11 @@ years_df = pd.DataFrame(list_of_years, columns=['Filter by Year'])
 # Plotly Dash App
 app = Dash(__name__)
 # for multi-page functionality
-dash.register_page(__name__)
+dash.register_page(__name__, path='/')
 
 layout = html.Main([
                 html.Div([
-                    html.H1('Customer Transactions'),
+                    html.H2('Customer Transactions'),
                     html.Div([
                         html.Section([
                             dash_table.DataTable(merged_df.to_dict('records'),                              # https://dash.plotly.com/datatable

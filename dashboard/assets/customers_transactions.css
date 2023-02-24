@@ -9,6 +9,10 @@
     font-family: 'Arial';
 }
 
+.main_container h2 {
+    margin: 0 0 0.5rem;
+}
+
 .container {
     display: flex;
     justify-content: space-between;

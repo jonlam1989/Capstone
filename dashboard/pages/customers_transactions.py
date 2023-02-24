@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.express as px 
 import plotly.graph_objects as go 
 from dash import Dash, dash_table, dcc, html, Input, Output
+import dash
 #----------------------------------------------------------------------------------------------------------
 # Used to display the transactions made by customers living in a given zip code for a given month and year. 
 # Order by day in descending order.
@@ -47,8 +48,10 @@ years_df = pd.DataFrame(list_of_years, columns=['Filter by Year'])
 #----------------------------------------------------------------------------------------------------------
 # Plotly Dash App
 app = Dash(__name__)
+# for multi-page functionality
+dash.register_page(__name__)
 
-app.layout = html.Main([
+layout = html.Main([
                 html.Div([
                     html.H1('Customer Transactions'),
                     html.Div([
@@ -122,8 +125,8 @@ app.layout = html.Main([
                 ], className='main_container')
             ], className='main')
 #----------------------------------------------------------------------------------------------------------
-# update dashboard based on user input
-@app.callback(
+# update dashboard based on user input - *NEED TO CONVERT @app.callback -> @dash.callback FOR MULTI-PAGE FUNCTIONALITY*
+@dash.callback(
     Output('data_table', 'data'), 
     [Input('zipcode_list', 'active_cell'), Input('months_list', 'active_cell'), Input('years_list', 'active_cell')] 
 )
@@ -166,8 +169,8 @@ def update_data_table(zipcode_list, months_list, years_list):
         # needs to match the data in data_table
         return filtered_df.to_dict('records')
 #----------------------------------------------------------------------------------------------------------
-# update stats based on transaction type
-@app.callback(
+# update stats based on transaction type - *NEED TO CONVERT @app.callback -> @dash.callback FOR MULTI-PAGE FUNCTIONALITY*
+@dash.callback(
     [Output('transaction_number', 'children'), Output('transaction_dollars', 'children')],
     [Input('transaction_type', 'value')]
 )
@@ -184,8 +187,8 @@ def update_transaction_type(transaction_type):
         return [number, f'${dollars:,.2f}']                                                                 # how to format string numbers with a comma
     return ['0', '$0']
 #----------------------------------------------------------------------------------------------------------
-# update stats based on state
-@app.callback(
+# update stats based on state - *NEED TO CONVERT @app.callback -> @dash.callback FOR MULTI-PAGE FUNCTIONALITY*
+@dash.callback(
     [Output('branch_number', 'children'), Output('state_dollars', 'children')],
     [Input('state', 'value')]
 )
@@ -201,6 +204,3 @@ def update_state(state):
     if state:
         return [number, f'${dollars:,.2f}']                                                                 # how to format string numbers with a comma
     return ['0', '$0']
-#----------------------------------------------------------------------------------------------------------
-if __name__ == '__main__':
-    app.run_server(debug=True)                                                                              # for code reloading / hot reloading

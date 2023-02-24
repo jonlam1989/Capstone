@@ -83,11 +83,11 @@ app.layout = html.Main([
                                     html.Div([
                                         html.Section([
                                             html.P('Branches'),
-                                            html.P('0')
+                                            html.P(id='branch_number', children=['0'])
                                         ]),
                                         html.Section([
                                             html.P('Total Dollars'),
-                                            html.P('$0')
+                                            html.P(id='state_dollars', children=['$0'])
                                         ])
                                     ], className='values'),
                                     dcc.Dropdown(
@@ -181,6 +181,24 @@ def update_transaction_type(transaction_type):
     dollars = filtered_df['TRANSACTION_VALUE'].sum()
 
     if transaction_type:
+        return [number, f'${dollars:,.2f}']                                                                 # how to format string numbers with a comma
+    return ['0', '$0']
+#----------------------------------------------------------------------------------------------------------
+# update stats based on state
+@app.callback(
+    [Output('branch_number', 'children'), Output('state_dollars', 'children')],
+    [Input('state', 'value')]
+)
+def update_state(state):
+    # filter by state
+    target_state = merged_df['CUST_STATE'] == state
+    filtered_df = merged_df[target_state]
+    
+    # find the count + sum 
+    number = len(filtered_df['BRANCH_CODE'].unique())
+    dollars = filtered_df['TRANSACTION_VALUE'].sum()
+
+    if state:
         return [number, f'${dollars:,.2f}']                                                                 # how to format string numbers with a comma
     return ['0', '$0']
 #----------------------------------------------------------------------------------------------------------

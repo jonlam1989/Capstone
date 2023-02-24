@@ -65,11 +65,11 @@ app.layout = html.Main([
                                     html.Div([
                                         html.Section([
                                             html.P('Transactions'),
-                                            html.P('0')
+                                            html.P(id='transaction_number', children=['0'])
                                         ]),
                                         html.Section([
                                             html.P('Total Dollars'),
-                                            html.P('$0')
+                                            html.P(id='transaction_dollars', children=['$0'])
                                         ])
                                     ], className='values'),
                                     dcc.Dropdown(
@@ -165,6 +165,24 @@ def update_data_table(zipcode_list, months_list, years_list):
         filtered_df = filtered_df.sort_values('TIMEID', ascending=False)
         # needs to match the data in data_table
         return filtered_df.to_dict('records')
+#----------------------------------------------------------------------------------------------------------
+# update stats based on transaction type
+@app.callback(
+    [Output('transaction_number', 'children'), Output('transaction_dollars', 'children')],
+    [Input('transaction_type', 'value')]
+)
+def update_transaction_type(transaction_type):
+    # filter by transaction type
+    type = merged_df['TRANSACTION_TYPE'] == transaction_type
+    filtered_df = merged_df[type]
+    
+    # find the count + sum 
+    number = filtered_df['TRANSACTION_TYPE'].count()
+    dollars = filtered_df['TRANSACTION_VALUE'].sum()
+
+    if transaction_type:
+        return [number, f'${dollars:,.2f}']                                                                 # how to format string numbers with a comma
+    return ['0', '$0']
 #----------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     app.run_server(debug=True)                                                                              # for code reloading / hot reloading

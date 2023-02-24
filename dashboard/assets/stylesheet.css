@@ -3,7 +3,7 @@
     justify-content: center;
 }
 
-.section {
+.main_container {
     width: 95%;
     text-align: center;
     font-family: 'Arial';
@@ -24,4 +24,27 @@
 
 .data_sidebar #zipcode {
     padding-left: 0.5rem;
+}
+
+.stats {
+    display: flex;
+}
+
+.values_container {
+    width: 50%;
+    margin: 0rem 4rem;
+}
+
+.values {
+    display: flex;
+    justify-content: space-between;
+}
+
+.values p {
+    font-size: 2rem;
+}
+
+.dropdown {
+    width: 75%;
+    margin: 0 auto;
 }

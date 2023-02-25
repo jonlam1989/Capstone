@@ -4,10 +4,10 @@ import pandas as pd
 import dash
 from dash import Dash, dash_table, dcc, html, Input, Output
 #----------------------------------------------------------------------------------------------------------
-# Used to display the transactions made by customers living in a given zip code for a given month and year. 
-# (Order by day in descending order.)
-# Used to display the number and total values of transactions for a given type.
-# Used to display the number and total values of transactions for branches in a given state.
+# 1. Used to display the transactions made by customers living in a given zip code for a given month and year. 
+#    (Order by day in descending order.)
+# 2. Used to display the number and total values of transactions for a given type.
+# 3. Used to display the number and total values of transactions for branches in a given state.
 #----------------------------------------------------------------------------------------------------------
 # read cleaned data + filter for only the SSN (need this to merge dataframes) and CUST_ZIP
 customer_df = pd.read_csv('cleaned_files/cleaned_customer.csv')
@@ -19,11 +19,8 @@ credit_card_df.rename(columns={'CUST_SSN':'SSN'}, inplace=True)
 
 # merge both dataframes
 merged_df = credit_card_df.merge(customer_df, on='SSN')
-# drop SSN - customer privacy
 merged_df.drop(columns=['SSN'], inplace=True)
-# convert column TIMEID to date type
 merged_df['TIMEID'] = pd.to_datetime(merged_df['TIMEID'], format='%Y%m%d')
-# keep only the date (not the timezone)
 merged_df['TIMEID'] = merged_df['TIMEID'].dt.date 
 
 # dropdown label
@@ -56,7 +53,7 @@ layout = html.Main([
                     html.H2('Customer Transactions'),
                     html.Div([
                         html.Section([
-                            dash_table.DataTable(merged_df.to_dict('records'),                              # https://dash.plotly.com/datatable
+                            dash_table.DataTable(merged_df.to_dict('records'),          # https://dash.plotly.com/datatable
                                                 [{'name': i, 'id': i} for i in merged_df.columns], 
                                                 page_size=10, 
                                                 id='data_table',
@@ -164,7 +161,7 @@ def update_data_table(zipcode_list, months_list, years_list):
             filtered_df = merged_df[zipcode_target & month_target]
         else:
             filtered_df = merged_df[zipcode_target & month_target & year_target]
-        # sort by day in descending order
+
         filtered_df = filtered_df.sort_values('TIMEID', ascending=False)
         # needs to match the data in data_table
         return filtered_df.to_dict('records')
@@ -184,7 +181,7 @@ def update_transaction_type(transaction_type):
     dollars = filtered_df['TRANSACTION_VALUE'].sum()
 
     if transaction_type:
-        return [number, f'${dollars:,.2f}']                                                                 # how to format string numbers with a comma
+        return [number, f'${dollars:,.2f}']                                 # how to format string numbers with a comma
     return ['0', '$0']
 #----------------------------------------------------------------------------------------------------------
 # update stats based on state - *NEED TO CONVERT @app.callback -> @dash.callback FOR MULTI-PAGE FUNCTIONALITY*
@@ -202,5 +199,5 @@ def update_state(state):
     dollars = filtered_df['TRANSACTION_VALUE'].sum()
 
     if state:
-        return [number, f'${dollars:,.2f}']                                                                 # how to format string numbers with a comma
+        return [number, f'${dollars:,.2f}']                                  # how to format string numbers with a comma
     return ['0', '$0']

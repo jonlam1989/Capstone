@@ -1,54 +1,54 @@
-.main {
+.transactions {
     display: flex;
     justify-content: center;
 }
 
-.main_container {
+.transactions .main_container {
     width: 95%;
     text-align: center;
     font-family: 'Arial';
 }
 
-.main_container h2 {
+.transactions .main_container h2 {
     margin: 0 0 0.5rem;
 }
 
-.container {
+.transactions .container {
     display: flex;
     justify-content: space-between;
 }
 
-.data {
+.transactions .data {
     width: 80%;
 }
 
-.data_sidebar {
+.transactions .data_sidebar {
     max-width: '400px';
 }
 
-.data_sidebar #zipcode {
+.transactions .data_sidebar #zipcode {
     padding-left: 0.5rem;
 }
 
-.stats {
+.transactions .stats {
     display: flex;
 }
 
-.values_container {
+.transactions .values_container {
     width: 50%;
     margin: 0rem 4rem;
 }
 
-.values {
+.transactions .values {
     display: flex;
     justify-content: space-between;
 }
 
-.values p {
+.transactions .values p {
     font-size: 2rem;
 }
 
-.dropdown {
+.transactions .dropdown {
     width: 75%;
     margin: 0 auto;
 }

@@ -1,15 +1,14 @@
 import numpy as np
 import pandas as pd
 
-import plotly.express as px 
-import plotly.graph_objects as go 
-
 import dash
 from dash import Dash, dash_table, dcc, html, Input, Output
 #----------------------------------------------------------------------------------------------------------
 # Used to display the transactions made by customers living in a given zip code for a given month and year. 
-# Order by day in descending order.
-
+# (Order by day in descending order.)
+# Used to display the number and total values of transactions for a given type.
+# Used to display the number and total values of transactions for branches in a given state.
+#----------------------------------------------------------------------------------------------------------
 # read cleaned data + filter for only the SSN (need this to merge dataframes) and CUST_ZIP
 customer_df = pd.read_csv('cleaned_files/cleaned_customer.csv')
 customer_df = customer_df[['SSN', 'CUST_ZIP', 'CUST_STATE']]
@@ -124,9 +123,9 @@ layout = html.Main([
                         ], className='data_sidebar')
                     ], className='container')
                 ], className='main_container')
-            ], className='main')
+            ], className='transactions')
 #----------------------------------------------------------------------------------------------------------
-# update dashboard based on user input - *NEED TO CONVERT @app.callback -> @dash.callback FOR MULTI-PAGE FUNCTIONALITY*
+# update customer transaction based on user input - *NEED TO CONVERT @app.callback -> @dash.callback FOR MULTI-PAGE FUNCTIONALITY*
 @dash.callback(
     Output('data_table', 'data'), 
     [Input('zipcode_list', 'active_cell'), Input('months_list', 'active_cell'), Input('years_list', 'active_cell')] 

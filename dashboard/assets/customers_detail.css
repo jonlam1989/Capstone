@@ -1,0 +1,19 @@
+.details {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.details .main_container {
+    width: 95%;
+}
+
+.details .main_container h2 {
+    margin: 0 0 0.5rem;
+}
+
+.details input {
+    margin: 1rem;
+    padding-left: 0.5rem;
+    font-size: 1.1rem;
+}

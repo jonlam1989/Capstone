@@ -8,7 +8,7 @@
     width: 95%;
 }
 
-.details .main_container h2 {
+.details .main_container #details_header {
     margin: 0 0 0.5rem;
 }
 
@@ -16,4 +16,8 @@
     margin: 1rem;
     padding-left: 0.5rem;
     font-size: 1.1rem;
+}
+
+.details .main_container #transactions_header {
+    margin: 4rem 0 0.5rem;
 }

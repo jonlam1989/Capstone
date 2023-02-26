@@ -40,7 +40,7 @@
     font-size: 1.4rem;
 }
 
-.bill .balance, .summary, .check {
+.bill .balance, .summary, .check, .monthly_transactions {
     padding: 1rem;
     border: 1px solid black;
     border-radius: 5px;
@@ -70,12 +70,12 @@
     font-size: 1.5rem;
 }
 
-.bill .check_container {
+.bill .check_container, .monthly_transactions_container {
     width: 95%;
     margin: 2.5rem;
 }
 
-.bill .check {
+.bill .check, .monthly_transactions {
     width: 75%;
     padding: 2rem;
 }
@@ -107,6 +107,11 @@
 .bill .bank_address div {
     text-align: left;
     font-size: 1.1rem;
+}
+
+.bill .monthly_transactions section{
+    display: flex;
+    justify-content: start;
 }
 
 .bill #err {

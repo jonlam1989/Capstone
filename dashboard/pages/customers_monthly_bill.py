@@ -9,9 +9,9 @@ from dash import Dash, dash_table, dcc, html, Input, Output
 # 1. Used to generate a monthly bill for a credit card number for a given month and year.
 #----------------------------------------------------------------------------------------------------------
 # read cleaned data
+branch_df = pd.read_csv('cleaned_files/cleaned_branch.csv')
 customer_df = pd.read_csv('cleaned_files/cleaned_customer.csv')
 credit_card_df = pd.read_csv('cleaned_files/cleaned_credit.csv')
-branch_df = pd.read_csv('cleaned_files/cleaned_branch.csv')
 credit_card_df.rename(columns={'CUST_SSN':'SSN'}, inplace=True)
 
 # merge both dataframes
@@ -106,7 +106,19 @@ layout = html.Main([
                             ])
                         ], className='bank_address'), 
                     ], className='check')
-                ], className='check_container')
+                ], className='check_container'),
+                html.Div([
+                    html.Div([
+                        html.Section([
+                            html.H3('Transactions')
+                        ]),
+                        dash_table.DataTable(id='monthly_activity', 
+                                             page_size=10,
+                                             style_as_list_view=True,
+                                             style_header={'fontWeight': 'bold'},
+                                             style_cell={'textAlign': 'center', 'font-family': 'Sans-serif'})
+                    ], className='monthly_transactions')
+                ], className='monthly_transactions_container')
             ]),
             html.Aside([
                 dash_table.DataTable(months_df.to_dict('records'), 
@@ -131,69 +143,78 @@ layout = html.Main([
      Output('today', 'children'), Output('reward_dollars', 'children'), Output('credit_limit', 'children'), 
      Output('available_credit', 'children'), Output('name', 'children'), Output('street', 'children'), 
      Output('zip', 'children'), Output('bank_name', 'children'), Output('bank_street', 'children'), 
-     Output('bank_zip', 'children')], 
+     Output('bank_zip', 'children'), Output('monthly_activity', 'data')], 
     [Input('cc', 'value'), Input('month', 'active_cell'), Input('year', 'active_cell')] 
 )
 def update_bill(cc, month, year):
-    
     if cc and month and year:
-        if cc.isnumeric() == False:
-            return ['(Please enter only numbers)','', '', '', '', '', '', '', '', '', '', '', '', '']
-        
-        # filter by credit card number
-        cc_transactions = merged_df['CREDIT_CARD_NO'] == int(cc)
-        if merged_df[cc_transactions].empty:
-            return ['(No credit card found with this number...please try again)','', '', '', '', '', '', '', '', '', '', '', '', '']
-        
-        # filter by month
-        month_cell_value = months_df.iloc[month['row']].values[0]
-        month_target = pd.to_datetime(merged_df['TIMEID']).dt.month == month_cell_value
-        # filter by year
-        year_cell_value = years_df.iloc[year['row']].values[0]
-        year_target = pd.to_datetime(merged_df['TIMEID']).dt.year == year_cell_value
-        # filter by month and year
-        common_target = month_target.isin(year_target)
-
-        filtered_merged_df = merged_df[cc_transactions & common_target]
-
-        # calculate the output values
-        new_balance = filtered_merged_df['TRANSACTION_VALUE'].sum()
-        minimum_payment = '$40.00'
-        # fixed bug when clicking on month 12 - need to increment year by 1 + reset month to 1
-        if month_cell_value == 12:
-            due_date = datetime.strptime(f'{year_cell_value + 1}-01-01', '%Y-%m-%d').date()
+        # check if text is numeric
+        if cc.isnumeric() != True:
+            return ['(Please enter only numbers)','', '', '', '', '', '', '', '', '', '', '', '', '', None]
         else:
-            due_date = datetime.strptime(f'{year_cell_value}-{month_cell_value + 1}-01', '%Y-%m-%d').date()
-        today = datetime.strptime(f'{year_cell_value}-{month_cell_value}-01', '%Y-%m-%d').date()
-        rewards = new_balance * 0.02
-        credit_limit = 10000
-        available_credit = credit_limit - new_balance
+            # filter by credit card number
+            cc_transactions = merged_df['CREDIT_CARD_NO'] == int(cc)
+            if merged_df[cc_transactions].empty:
+                return ['(No credit card found with this number...please try again)','', '', '', '', '', '', '', '', '', '', '', '', '', None]
+            
+            # filter by month
+            month_cell_value = months_df.iloc[month['row']].values[0]
+            month_target = pd.to_datetime(merged_df['TIMEID']).dt.month == month_cell_value
+            # filter by year
+            year_cell_value = years_df.iloc[year['row']].values[0]
+            year_target = pd.to_datetime(merged_df['TIMEID']).dt.year == year_cell_value
+            # filter by month and year
+            common_target = month_target.isin(year_target)
 
-        # select 1 row to collect customer details + bank details
-        target_row = filtered_merged_df.iloc[0]
-        name = f'{target_row["FIRST_NAME"]} {target_row["LAST_NAME"]}' 
-        street = target_row['FULL_STREET_ADDRESS'].split(',')
-        street = f'{street[1]} {street[0]}'
-        zip = f'{target_row["CUST_CITY"]}, {target_row["CUST_STATE"]} {target_row["CUST_ZIP"]}'
-        bank_name = target_row["BRANCH_NAME"]
-        bank_street = target_row["BRANCH_STREET"]
-        bank_zip = f'{target_row["BRANCH_CITY"]}, {target_row["BRANCH_STATE"]} {target_row["BRANCH_ZIP"]}'
+            # used to calculate all output values
+            filtered_merged_df = merged_df[cc_transactions & common_target]
+            # if there are no transactions for that month
+            if filtered_merged_df.empty:
+                return ['','$0.00', '', '', '', '', '', '', '', '', '', '', '', '', None]
 
-        return ['',
-                f'${new_balance:,.2f}', 
-                minimum_payment, 
-                due_date, 
-                f'(as of {today})', 
-                f'${rewards:.2f}', 
-                f'${credit_limit:,.2f}', 
-                f'${available_credit:,.2f}', 
-                name, 
-                street, 
-                zip, 
-                bank_name, 
-                bank_street, 
-                bank_zip]
+            # calculate the output values to display in bill
+            new_balance = filtered_merged_df['TRANSACTION_VALUE'].sum()
+            minimum_payment = '$40.00'
+            # fixed bug when clicking on month 12 - need to increment year by 1 + reset month to 1
+            if month_cell_value == 12:
+                due_date = datetime.strptime(f'{year_cell_value + 1}-01-01', '%Y-%m-%d').date()
+            else:
+                due_date = datetime.strptime(f'{year_cell_value}-{month_cell_value + 1}-01', '%Y-%m-%d').date()
+            today = datetime.strptime(f'{year_cell_value}-{month_cell_value}-01', '%Y-%m-%d').date()
+            rewards = new_balance * 0.02
+            credit_limit = 10000
+            available_credit = credit_limit - new_balance
+
+            # select 1 row to collect customer details + bank details
+            target_row = filtered_merged_df.iloc[0]
+            name = f'{target_row["FIRST_NAME"]} {target_row["LAST_NAME"]}' 
+            street = target_row['FULL_STREET_ADDRESS'].split(',')
+            street = f'{street[1]} {street[0]}'
+            zip = f'{target_row["CUST_CITY"]}, {target_row["CUST_STATE"]} {target_row["CUST_ZIP"]}'
+            bank_name = target_row["BRANCH_NAME"]
+            bank_street = target_row["BRANCH_STREET"]
+            bank_zip = f'{target_row["BRANCH_CITY"]}, {target_row["BRANCH_STATE"]} {target_row["BRANCH_ZIP"]}'
+
+            # monthly transactions
+            rearranged_df = filtered_merged_df[['TIMEID', 'TRANSACTION_TYPE', 'TRANSACTION_VALUE']]
+            rearranged_df = rearranged_df.sort_values('TIMEID', ascending=False)
+
+            return ['',
+                    f'${new_balance:,.2f}', 
+                    minimum_payment, 
+                    due_date, 
+                    f'(as of {today})', 
+                    f'${rewards:.2f}', 
+                    f'${credit_limit:,.2f}', 
+                    f'${available_credit:,.2f}', 
+                    name, 
+                    street, 
+                    zip, 
+                    bank_name, 
+                    bank_street, 
+                    bank_zip, 
+                    rearranged_df.to_dict('records')]
     else:
         # defaults - when the page first loads 
-        return ['','', '', '', '', '', '', '', '', '', '', '', '', '']
+        return ['','', '', '', '', '', '', '', '', '', '', '', '', '', None]
     

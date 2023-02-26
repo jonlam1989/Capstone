@@ -49,78 +49,78 @@ app = Dash(__name__)
 dash.register_page(__name__, path='/')
 
 layout = html.Main([
+    html.Div([
+        html.H2('Customer Transactions'),
+        html.Div([
+            html.Section([
+                dash_table.DataTable(merged_df.to_dict('records'),          # https://dash.plotly.com/datatable
+                                    [{'name': i, 'id': i} for i in merged_df.columns], 
+                                    page_size=10, 
+                                    id='data_table',
+                                    style_as_list_view=True,
+                                    style_header={'fontWeight': 'bold'},
+                                    style_cell={'textAlign': 'center', 'font-family': 'Sans-serif'}),
                 html.Div([
-                    html.H2('Customer Transactions'),
-                    html.Div([
-                        html.Section([
-                            dash_table.DataTable(merged_df.to_dict('records'),          # https://dash.plotly.com/datatable
-                                                [{'name': i, 'id': i} for i in merged_df.columns], 
-                                                page_size=10, 
-                                                id='data_table',
-                                                style_as_list_view=True,
-                                                style_header={'fontWeight': 'bold'},
-                                                style_cell={'textAlign': 'center', 'font-family': 'Sans-serif'}),
-                            html.Div([
-                                html.Section([
-                                    html.Div([
-                                        html.Section([
-                                            html.P('Transactions'),
-                                            html.P(id='transaction_number', children=['0'])
-                                        ]),
-                                        html.Section([
-                                            html.P('Total Dollars'),
-                                            html.P(id='transaction_dollars', children=['$0'])
-                                        ])
-                                    ], className='values'),
-                                    dcc.Dropdown(
-                                        id='transaction_type',
-                                        className='dropdown',
-                                        placeholder='Select a transaction type',
-                                        options=transaction_type_options,
-                                        maxHeight=100
-                                    )], className='values_container'),
-                                html.Section([
-                                    html.Div([
-                                        html.Section([
-                                            html.P('Branches'),
-                                            html.P(id='branch_number', children=['0'])
-                                        ]),
-                                        html.Section([
-                                            html.P('Total Dollars'),
-                                            html.P(id='state_dollars', children=['$0'])
-                                        ])
-                                    ], className='values'),
-                                    dcc.Dropdown(
-                                        id='state',
-                                        className='dropdown',
-                                        placeholder='Select a state',
-                                        options=state_options,
-                                        maxHeight=100
-                                    )], className='values_container')
-                            ], className='stats')
-                        ], className='data'),
-                        html.Aside([
-                            dash_table.DataTable(zipcodes_df.to_dict('records'), 
-                                                 [{'name': i, 'id': i} for i in zipcodes_df],
-                                                 id='zipcode_list',
-                                                 style_header={'fontWeight': 'bold'}, 
-                                                 style_table={'height': '350px','overflowY': 'auto'}),
-                            html.Br(),
-                            dash_table.DataTable(months_df.to_dict('records'), 
-                                                 [{'name': i, 'id': i} for i in months_df],
-                                                 id='months_list',
-                                                 style_header={'fontWeight': 'bold'}, 
-                                                 style_table={'height': '150px','overflowY': 'auto'}),
-                            html.Br(),
-                            dash_table.DataTable(years_df.to_dict('records'), 
-                                                 [{'name': i, 'id': i} for i in years_df],
-                                                 id='years_list',
-                                                 style_header={'fontWeight': 'bold'}, 
-                                                 style_table={'height': '150px','overflowY': 'auto'})
-                        ], className='data_sidebar')
-                    ], className='container')
-                ], className='main_container')
-            ], className='transactions')
+                    html.Section([
+                        html.Div([
+                            html.Section([
+                                html.P('Transactions'),
+                                html.P(id='transaction_number', children=['0'])
+                            ]),
+                            html.Section([
+                                html.P('Total Dollars'),
+                                html.P(id='transaction_dollars', children=['$0'])
+                            ])
+                        ], className='values'),
+                        dcc.Dropdown(
+                            id='transaction_type',
+                            className='dropdown',
+                            placeholder='Select a transaction type',
+                            options=transaction_type_options,
+                            maxHeight=100
+                        )], className='values_container'),
+                    html.Section([
+                        html.Div([
+                            html.Section([
+                                html.P('Branches'),
+                                html.P(id='branch_number', children=['0'])
+                            ]),
+                            html.Section([
+                                html.P('Total Dollars'),
+                                html.P(id='state_dollars', children=['$0'])
+                            ])
+                        ], className='values'),
+                        dcc.Dropdown(
+                            id='state',
+                            className='dropdown',
+                            placeholder='Select a state',
+                            options=state_options,
+                            maxHeight=100
+                        )], className='values_container')
+                ], className='stats')
+            ], className='data'),
+            html.Aside([
+                dash_table.DataTable(zipcodes_df.to_dict('records'), 
+                                        [{'name': i, 'id': i} for i in zipcodes_df],
+                                        id='zipcode_list',
+                                        style_header={'fontWeight': 'bold'}, 
+                                        style_table={'height': '350px','overflowY': 'auto'}),
+                html.Br(),
+                dash_table.DataTable(months_df.to_dict('records'), 
+                                        [{'name': i, 'id': i} for i in months_df],
+                                        id='months_list',
+                                        style_header={'fontWeight': 'bold'}, 
+                                        style_table={'height': '150px','overflowY': 'auto'}),
+                html.Br(),
+                dash_table.DataTable(years_df.to_dict('records'), 
+                                        [{'name': i, 'id': i} for i in years_df],
+                                        id='years_list',
+                                        style_header={'fontWeight': 'bold'}, 
+                                        style_table={'height': '150px','overflowY': 'auto'})
+            ], className='data_sidebar')
+        ], className='container')
+    ], className='main_container')
+], className='transactions')
 #----------------------------------------------------------------------------------------------------------
 # update customer transaction based on user input - *NEED TO CONVERT @app.callback -> @dash.callback FOR MULTI-PAGE FUNCTIONALITY*
 @dash.callback(

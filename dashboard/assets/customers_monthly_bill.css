@@ -1,0 +1,28 @@
+.bill {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.bill .main_container {
+    width: 95%;
+}
+
+.bill .main_container #bill_header {
+    margin: 0 0 0.5rem;
+}
+
+.bill input {
+    margin: 1rem;
+    padding-left: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.bill .container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.bill .bill_statement {
+    width: 80%;
+}

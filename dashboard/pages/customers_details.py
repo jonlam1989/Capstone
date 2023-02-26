@@ -36,6 +36,7 @@ layout = html.Main([
         dcc.Input(id='first', type='text', placeholder='First Name', debounce=True),                # debounce = delay
         dcc.Input(id='middle', type='text', placeholder='Middle Name', debounce=True),
         dcc.Input(id='last', type='text', placeholder='Last Name', debounce=True),
+        html.A(html.Button('Clear all fields'), href='/pages/customers-details'),
         html.Div(id='error'),
         dash_table.DataTable(id='details',
                             style_as_list_view=True,

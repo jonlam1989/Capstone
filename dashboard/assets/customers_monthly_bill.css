@@ -20,14 +20,18 @@
 
 .bill .container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
+}
+
+.bill aside {
+    margin-top: -1rem;
 }
 
 .bill .bill_statement {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     width: 80%;
-    margin-top: 2.5rem;
+    margin: 1.5rem;
 }
 
 .bill .info {
@@ -36,7 +40,7 @@
     font-size: 1.4rem;
 }
 
-.bill .balance, .summary {
+.bill .balance, .summary, .check {
     padding: 1rem;
     border: 1px solid black;
     border-radius: 5px;
@@ -64,4 +68,48 @@
 
 .bill .credit h4 {
     font-size: 1.5rem;
+}
+
+.bill .check_container {
+    width: 95%;
+    margin: 2.5rem;
+}
+
+.bill .check {
+    width: 75%;
+    padding: 2rem;
+}
+
+.bill .check p {
+    margin: 0;
+}
+
+.bill .cust_address {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+}
+
+.bill .cust_address div:first-child {
+    font-size: 1.1rem;
+}
+
+.bill .cust_address div:last-child {
+    margin-top: 6rem;
+    text-align: right;
+}
+
+.bill .bank_address {
+    display: flex;
+    justify-content: center;
+}
+
+.bill .bank_address div {
+    text-align: left;
+    font-size: 1.1rem;
+}
+
+.bill #err {
+    font-weight: bold;
+    font-size: 1.2rem;
 }

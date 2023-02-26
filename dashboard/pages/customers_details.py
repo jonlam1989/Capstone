@@ -75,7 +75,7 @@ def update_details(first, middle, last, start_date, end_date):
         
         # print error message if dataframe is empty=(name is NOT found)
         if target_customer_df.empty:
-            return ['No customer found with this name...please try again', None, None]
+            return ['(No customer found with this name...please try again)', None, None]
         else:
             # find customer based on ssn in credit_card_df
             ssn = target_customer_df['SSN'].values[0]

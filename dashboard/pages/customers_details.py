@@ -42,6 +42,8 @@ layout = html.Main([
                             style_as_list_view=True,
                             style_header={'fontWeight': 'bold'},
                             style_cell={'textAlign': 'center', 'font-family': 'Sans-serif'}),
+        html.Form(id='edit_form'),
+        html.Div(id='output'),
         html.H2('Customer Transactions', id='transactions_header'),
         html.Div([
             dcc.DatePickerRange(id='date_range', 
@@ -59,7 +61,7 @@ layout = html.Main([
 #----------------------------------------------------------------------------------------------------------
 # update customer details based on user input - *NEED TO CONVERT @app.callback -> @dash.callback FOR MULTI-PAGE FUNCTIONALITY*
 @dash.callback(
-    [Output('error', 'children'), Output('details', 'data'), Output('transaction', 'data')],
+    [Output('error', 'children'), Output('details', 'data'), Output('transaction', 'data'), Output('edit_form', 'children')],
     [Input('first', 'value'), Input('middle', 'value'), Input('last', 'value'), 
      Input('date_range', 'start_date'), Input('date_range', 'end_date')]
 )
@@ -75,7 +77,7 @@ def update_details(first, middle, last, start_date, end_date):
         
         # print error message if dataframe is empty=(name is NOT found)
         if target_customer_df.empty:
-            return ['(No customer found with this name...please try again)', None, None]
+            return ['(No customer found with this name...please try again)', None, None, None]
         else:
             # find customer based on ssn in credit_card_df
             ssn = target_customer_df['SSN'].values[0]
@@ -95,8 +97,34 @@ def update_details(first, middle, last, start_date, end_date):
                 target_transactions_df = target_transactions_df.sort_values('TIMEID', ascending=False)
 
             target_transactions_df['TIMEID'] = credit_card_df['TIMEID'].dt.date
+
             # return customer details + customer transactions if name is found
-            return ['', target_customer_df.to_dict('records'), target_transactions_df.to_dict('records')]
+            return ['', target_customer_df.to_dict('records'), target_transactions_df.to_dict('records'), 
+                [
+                    html.H2('Edit the Existing Customer Details'),
+                    dcc.Input(id='edit_first', type='text', value=target_customer_df['FIRST_NAME'].values[0], placeholder='Edit First Name', debounce=True), 
+                    dcc.Input(id='edit_mid', type='text', value=target_customer_df['MIDDLE_NAME'].values[0], placeholder='Edit Middle Name', debounce=True),
+                    dcc.Input(id='edit_last', type='text', value=target_customer_df['LAST_NAME'].values[0], placeholder='Edit Last Name', debounce=True),
+                    dcc.Input(id='edit_cc', type='text', value=target_customer_df['CREDIT_CARD_NO'].values[0], placeholder='Edit Credit Card', debounce=True),
+                    dcc.Input(id='edit_street', type='text', value=target_customer_df['FULL_STREET_ADDRESS'].values[0], placeholder='Edit Street Address', debounce=True),
+                    dcc.Input(id='edit_city', type='text', value=target_customer_df['CITY'].values[0], placeholder='Edit City', debounce=True),
+                    dcc.Input(id='edit_state', type='text', value=target_customer_df['STATE'].values[0], placeholder='Edit State', debounce=True),
+                    dcc.Input(id='edit_country', type='text', value=target_customer_df['COUNTRY'].values[0], placeholder='Edit Country', debounce=True),
+                    dcc.Input(id='edit_zip', type='text', value=target_customer_df['ZIP'].values[0], placeholder='Edit Zip Code', debounce=True),
+                    dcc.Input(id='edit_phone', type='text', value=target_customer_df['PHONE'].values[0], placeholder='Edit Phone', debounce=True),
+                    dcc.Input(id='edit_email', type='text', value=target_customer_df['EMAIL'].values[0], placeholder='Edit Email', debounce=True),
+                    html.Div(html.Button('Submit', id='Submit', n_clicks=0))
+                ]
+            ]
     else:
         # defaults - when the page first loads 
-        return ['', None, None]
+        return ['', None, None, None]
+#----------------------------------------------------------------------------------------------------------
+# update customer details based on user input - *NEED TO CONVERT @app.callback -> @dash.callback FOR MULTI-PAGE FUNCTIONALITY*
+@dash.callback(
+    Output('output', 'children'),
+    [Input('Submit', 'n_clicks')]
+)
+def submit_form(n_clicks):
+    print(n_clicks) 
+    return ''

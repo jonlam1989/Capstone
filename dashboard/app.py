@@ -1,7 +1,7 @@
 import dash
 from dash import Dash, html, dcc
 
-app = Dash(__name__, use_pages=True)
+app = Dash(__name__, use_pages=True, suppress_callback_exceptions=True) # need suppress callback exception for the edit existing customer details form
 
 app.layout = html.Main([
 	html.Div([
@@ -17,4 +17,4 @@ app.layout = html.Main([
 ], className='app')
 
 if __name__ == '__main__':
-	app.run_server(debug=True)                                          # for code reloading / hot reloading
+	app.run_server(debug=True)                                           # for code reloading / hot reloading

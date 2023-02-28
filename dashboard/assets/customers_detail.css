@@ -18,6 +18,11 @@
     font-size: 1.1rem;
 }
 
+.details form input, .details form button {
+    width: auto;
+    margin: 0.25rem;
+}
+
 .details .main_container #transactions_header {
     margin: 2rem 0 0.5rem;
 }

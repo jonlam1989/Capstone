@@ -1,6 +1,10 @@
 import numpy as np
 import pandas as pd
 
+import mysql.connector as mariadb
+from dotenv import load_dotenv              # environment variables
+import os
+
 import dash
 from dash import Dash, dash_table, dcc, html, Input, Output
 #----------------------------------------------------------------------------------------------------------
@@ -9,9 +13,128 @@ from dash import Dash, dash_table, dcc, html, Input, Output
 # 3. Used to display the transactions made by a customer between two dates. 
 #    (Order by year, month, and day in descending order.)
 #----------------------------------------------------------------------------------------------------------
-# read cleaned data
-customer_df = pd.read_csv('cleaned_files/cleaned_customer.csv')
-credit_card_df = pd.read_csv('cleaned_files/cleaned_credit.csv')
+# load the environment variables
+load_dotenv()
+
+# assign environment variables
+PASSWORD = os.getenv('MariaDB_Password')
+USER = os.getenv('MariaDB_Username')
+
+# functions: get data + update data
+def get_customer_data():
+    try:
+        # establish connection to MariaDB
+        con = mariadb.connect(
+            host='localhost',
+            user=USER,
+            password=PASSWORD,
+            database='creditcard_capstone'
+        )
+
+        # create a cursor
+        cur = con.cursor()
+        # SQL statement
+        query = ''' 
+        SELECT *
+        FROM cdw_sapp_customer
+        '''
+        # execute SQL statement
+        cur.execute(query)
+
+        # convert results to pandas dataframe
+        customer_df = pd.DataFrame(cur, columns=['SSN', 
+                                                 'FIRST_NAME', 
+                                                 'MIDDLE_NAME', 
+                                                 'LAST_NAME', 
+                                                 'CREDIT_CARD_NO', 
+                                                 'FULL_STREET_ADDRESS', 
+                                                 'CUST_CITY', 
+                                                 'CUST_STATE', 
+                                                 'CUST_COUNTRY', 
+                                                 'CUST_ZIP', 
+                                                 'CUST_PHONE', 
+                                                 'CUST_EMAIL', 
+                                                 'LAST_UPDATED'])
+        # close connection to MariaDB
+        con.close()
+
+        return customer_df
+    except mariadb.ERROR as err:
+        print(err)
+
+def get_credit_data():
+    try:
+        # establish connection to MariaDB
+        con = mariadb.connect(
+            host='localhost',
+            user=USER,
+            password=PASSWORD,
+            database='creditcard_capstone'
+        )
+
+        # create a cursor
+        cur = con.cursor()
+        # SQL statement
+        query = ''' 
+        SELECT *
+        FROM cdw_sapp_credit_card
+        '''
+        # execute SQL statement
+        cur.execute(query)
+
+        # convert results to pandas dataframe
+        credit_df = pd.DataFrame(cur, columns=['CUST_CC_NO', 
+                                               'TIMEID', 
+                                               'CUST_SSN', 
+                                               'BRANCH_CODE',
+                                               'TRANSACTION_TYPE', 
+                                               'TRANSACTION_VALUE', 
+                                               'TRANSACTION_ID'])
+        # close connection to MariaDB
+        con.close()
+
+        return credit_df
+    except mariadb.ERROR as err:
+        print(err)
+
+def update_customer_data(*args):
+    try:
+        # establish connection to MariaDB
+        con = mariadb.connect(
+            host='localhost',
+            user=USER,
+            password=PASSWORD,
+            database='creditcard_capstone'
+        )
+        
+        # create a cursor
+        cur = con.cursor()
+        
+        # SQL statement
+        query = '''
+        UPDATE cdw_sapp_customer
+        SET FIRST_NAME = '{}', MIDDLE_NAME = '{}', LAST_NAME = '{}',
+            CREDIT_CARD_NO = '{}', FULL_STREET_ADDRESS = '{}', CUST_CITY = '{}',
+            CUST_STATE = '{}', CUST_COUNTRY = '{}', CUST_ZIP = '{}',
+            CUST_PHONE = '{}', CUST_EMAIL = '{}'
+        WHERE FIRST_NAME = '{}' AND MIDDLE_NAME = '{}' AND LAST_NAME = '{}'
+        '''
+        # execute SQL statement
+        cur.execute(query.format(args[0], args[1], args[2], args[3], args[4], args[5], 
+                                args[6], args[7], args[8], args[9], args[10], 
+                                args[0], args[1], args[2]))
+        con.commit()
+        
+        # close connection to MariaDB
+        con.close()
+
+        return cur.rowcount > 0
+    except mariadb.ERROR as e:
+        print(e)    
+#----------------------------------------------------------------------------------------------------------
+# read clean data
+customer_df = get_customer_data()
+credit_card_df = get_credit_data()
 credit_card_df.rename(columns={'CUST_CC_NO': 'CREDIT_CARD_NO'}, inplace=True)
 credit_card_df['TIMEID'] = pd.to_datetime(credit_card_df['TIMEID'], format='%Y%m%d')
 
@@ -100,21 +223,21 @@ def update_details(first, middle, last, start_date, end_date):
 
             # return customer details + customer transactions if name is found
             return ['', target_customer_df.to_dict('records'), target_transactions_df.to_dict('records'), 
-                [
-                    html.H2('Edit the Existing Customer Details'),
-                    dcc.Input(id='edit_first', type='text', value=target_customer_df['FIRST_NAME'].values[0], placeholder='Edit First Name', debounce=True), 
-                    dcc.Input(id='edit_mid', type='text', value=target_customer_df['MIDDLE_NAME'].values[0], placeholder='Edit Middle Name', debounce=True),
-                    dcc.Input(id='edit_last', type='text', value=target_customer_df['LAST_NAME'].values[0], placeholder='Edit Last Name', debounce=True),
-                    dcc.Input(id='edit_cc', type='text', value=target_customer_df['CREDIT_CARD_NO'].values[0], placeholder='Edit Credit Card', debounce=True),
-                    dcc.Input(id='edit_street', type='text', value=target_customer_df['FULL_STREET_ADDRESS'].values[0], placeholder='Edit Street Address', debounce=True),
-                    dcc.Input(id='edit_city', type='text', value=target_customer_df['CITY'].values[0], placeholder='Edit City', debounce=True),
-                    dcc.Input(id='edit_state', type='text', value=target_customer_df['STATE'].values[0], placeholder='Edit State', debounce=True),
-                    dcc.Input(id='edit_country', type='text', value=target_customer_df['COUNTRY'].values[0], placeholder='Edit Country', debounce=True),
-                    dcc.Input(id='edit_zip', type='text', value=target_customer_df['ZIP'].values[0], placeholder='Edit Zip Code', debounce=True),
-                    dcc.Input(id='edit_phone', type='text', value=target_customer_df['PHONE'].values[0], placeholder='Edit Phone', debounce=True),
-                    dcc.Input(id='edit_email', type='text', value=target_customer_df['EMAIL'].values[0], placeholder='Edit Email', debounce=True),
-                    html.Div(html.Button('Submit', id='Submit', n_clicks=0))
-                ]
+                    [
+                        html.H2('Edit the Existing Customer Details'),
+                        dcc.Input(id='edit_first', type='text', value=target_customer_df['FIRST_NAME'].values[0], placeholder='Edit First Name', debounce=True), 
+                        dcc.Input(id='edit_mid', type='text', value=target_customer_df['MIDDLE_NAME'].values[0], placeholder='Edit Middle Name', debounce=True),
+                        dcc.Input(id='edit_last', type='text', value=target_customer_df['LAST_NAME'].values[0], placeholder='Edit Last Name', debounce=True),
+                        dcc.Input(id='edit_cc', type='text', value=target_customer_df['CREDIT_CARD_NO'].values[0], placeholder='Edit Credit Card', debounce=True),
+                        dcc.Input(id='edit_street', type='text', value=target_customer_df['FULL_STREET_ADDRESS'].values[0], placeholder='Edit Street Address', debounce=True),
+                        dcc.Input(id='edit_city', type='text', value=target_customer_df['CITY'].values[0], placeholder='Edit City', debounce=True),
+                        dcc.Input(id='edit_state', type='text', value=target_customer_df['STATE'].values[0], placeholder='Edit State', debounce=True),
+                        dcc.Input(id='edit_country', type='text', value=target_customer_df['COUNTRY'].values[0], placeholder='Edit Country', debounce=True),
+                        dcc.Input(id='edit_zip', type='text', value=target_customer_df['ZIP'].values[0], placeholder='Edit Zip Code', debounce=True),
+                        dcc.Input(id='edit_phone', type='text', value=target_customer_df['PHONE'].values[0], placeholder='Edit Phone', debounce=True),
+                        dcc.Input(id='edit_email', type='text', value=target_customer_df['EMAIL'].values[0], placeholder='Edit Email', debounce=True),
+                        html.Div(html.Button('Submit', id='Submit', n_clicks=0))
+                    ]
             ]
     else:
         # defaults - when the page first loads 
@@ -123,8 +246,16 @@ def update_details(first, middle, last, start_date, end_date):
 # update customer details based on user input - *NEED TO CONVERT @app.callback -> @dash.callback FOR MULTI-PAGE FUNCTIONALITY*
 @dash.callback(
     Output('output', 'children'),
-    [Input('Submit', 'n_clicks')]
+    [Input('edit_first', 'value'), Input('edit_mid', 'value'), Input('edit_last', 'value'), Input('edit_cc', 'value'), 
+     Input('edit_street', 'value'), Input('edit_city', 'value'), Input('edit_state', 'value'), Input('edit_country', 'value'), 
+     Input('edit_zip', 'value'), Input('edit_phone', 'value'), Input('edit_email', 'value'), Input('Submit', 'n_clicks')]
 )
-def submit_form(n_clicks):
-    print(n_clicks) 
+def submit_form(edit_first, edit_mid, edit_last, edit_cc, edit_street, edit_city, 
+                edit_state, edit_country, edit_zip, edit_phone, edit_email, n_clicks):
+    if n_clicks > 0:
+        update_customer_data(edit_first, edit_mid, edit_last, edit_cc, edit_street, edit_city, 
+                             edit_state, edit_country, edit_zip, edit_phone, edit_email, 
+                             edit_first, edit_mid, edit_last)
+        
+    # dont need to output anything    
     return ''

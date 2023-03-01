@@ -113,16 +113,17 @@ def update_customer_data(*args):
         # SQL statement
         query = '''
         UPDATE cdw_sapp_customer
-        SET FIRST_NAME = '{}', MIDDLE_NAME = '{}', LAST_NAME = '{}',
+        SET 
+            FIRST_NAME = '{}', MIDDLE_NAME = '{}', LAST_NAME = '{}',
             CREDIT_CARD_NO = '{}', FULL_STREET_ADDRESS = '{}', CUST_CITY = '{}',
             CUST_STATE = '{}', CUST_COUNTRY = '{}', CUST_ZIP = '{}',
             CUST_PHONE = '{}', CUST_EMAIL = '{}'
-        WHERE FIRST_NAME = '{}' AND MIDDLE_NAME = '{}' AND LAST_NAME = '{}'
+        WHERE SSN = '{}'
         '''
         # execute SQL statement
         cur.execute(query.format(args[0], args[1], args[2], args[3], args[4], args[5], 
                                 args[6], args[7], args[8], args[9], args[10], 
-                                args[0], args[1], args[2]))
+                                args[11]))
         con.commit()
         
         # close connection to MariaDB
@@ -153,6 +154,7 @@ dash.register_page(__name__)
 
 layout = html.Main([
     html.Div([
+        dcc.Store(id='data_store', data=[], storage_type='memory'),
         html.H2('Customer Details', id='details_header'),
         html.Label('Search customer details by full name: '),
         html.Br(),
@@ -165,7 +167,7 @@ layout = html.Main([
                             style_as_list_view=True,
                             style_header={'fontWeight': 'bold'},
                             style_cell={'textAlign': 'center', 'font-family': 'Sans-serif'}),
-        html.Form(id='edit_form'),
+        html.Form(id='edit_form', style={'display': None}),
         html.Div(id='output'),
         html.H2('Customer Transactions', id='transactions_header'),
         html.Div([
@@ -184,7 +186,8 @@ layout = html.Main([
 #----------------------------------------------------------------------------------------------------------
 # update customer details based on user input - *NEED TO CONVERT @app.callback -> @dash.callback FOR MULTI-PAGE FUNCTIONALITY*
 @dash.callback(
-    [Output('error', 'children'), Output('details', 'data'), Output('transaction', 'data'), Output('edit_form', 'children')],
+    [Output('error', 'children'), Output('details', 'data'), Output('transaction', 'data'), Output('edit_form', 'children'),
+     Output('data_store', 'data')],
     [Input('first', 'value'), Input('middle', 'value'), Input('last', 'value'), 
      Input('date_range', 'start_date'), Input('date_range', 'end_date')]
 )
@@ -200,7 +203,7 @@ def update_details(first, middle, last, start_date, end_date):
         
         # print error message if dataframe is empty=(name is NOT found)
         if target_customer_df.empty:
-            return ['(No customer found with this name...please try again)', None, None, None]
+            return ['(No customer found with this name...please try again)', None, None, None, None]
         else:
             # find customer based on ssn in credit_card_df
             ssn = target_customer_df['SSN'].values[0]
@@ -237,25 +240,25 @@ def update_details(first, middle, last, start_date, end_date):
                         dcc.Input(id='edit_phone', type='text', value=target_customer_df['PHONE'].values[0], placeholder='Edit Phone', debounce=True),
                         dcc.Input(id='edit_email', type='text', value=target_customer_df['EMAIL'].values[0], placeholder='Edit Email', debounce=True),
                         html.Div(html.Button('Submit', id='Submit', n_clicks=0))
-                    ]
+                    ],
+                    ssn
             ]
     else:
         # defaults - when the page first loads 
-        return ['', None, None, None]
+        return ['', None, None, None, None]
 #----------------------------------------------------------------------------------------------------------
 # update customer details based on user input - *NEED TO CONVERT @app.callback -> @dash.callback FOR MULTI-PAGE FUNCTIONALITY*
 @dash.callback(
     Output('output', 'children'),
-    [Input('edit_first', 'value'), Input('edit_mid', 'value'), Input('edit_last', 'value'), Input('edit_cc', 'value'), 
+    [Input('data_store', 'data'), Input('edit_first', 'value'), Input('edit_mid', 'value'), Input('edit_last', 'value'), Input('edit_cc', 'value'), 
      Input('edit_street', 'value'), Input('edit_city', 'value'), Input('edit_state', 'value'), Input('edit_country', 'value'), 
      Input('edit_zip', 'value'), Input('edit_phone', 'value'), Input('edit_email', 'value'), Input('Submit', 'n_clicks')]
 )
-def submit_form(edit_first, edit_mid, edit_last, edit_cc, edit_street, edit_city, 
+def submit_form(data, edit_first, edit_mid, edit_last, edit_cc, edit_street, edit_city, 
                 edit_state, edit_country, edit_zip, edit_phone, edit_email, n_clicks):
+
     if n_clicks > 0:
         update_customer_data(edit_first, edit_mid, edit_last, edit_cc, edit_street, edit_city, 
-                             edit_state, edit_country, edit_zip, edit_phone, edit_email, 
-                             edit_first, edit_mid, edit_last)
-        
-    # dont need to output anything    
+                             edit_state, edit_country, edit_zip, edit_phone, edit_email, data)
+
     return ''

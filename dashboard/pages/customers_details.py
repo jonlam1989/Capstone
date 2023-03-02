@@ -152,9 +152,9 @@ app = Dash(__name__)
 # for multi-page functionality
 dash.register_page(__name__)
 
-layout = html.Main([
+layout = html.Main([ 
     html.Div([
-        dcc.Store(id='data_store', data=[], storage_type='memory'),
+        dcc.Store(id='ssn', data=[], storage_type='memory'),                                        # store customer ssn
         html.H2('Customer Details', id='details_header'),
         html.Label('Search customer details by full name: '),
         html.Br(),
@@ -200,7 +200,7 @@ layout = html.Main([
 #----------------------------------------------------------------------------------------------------------
 # update customer details based on user input - *NEED TO CONVERT @app.callback -> @dash.callback FOR MULTI-PAGE FUNCTIONALITY*
 @dash.callback(
-    [Output('error', 'children'), Output('details', 'data'), Output('transaction', 'data'), Output('data_store', 'data'),
+    [Output('error', 'children'), Output('details', 'data'), Output('transaction', 'data'), Output('ssn', 'data'),
      Output('edit_form', component_property='style'), Output('edit_first', 'value'), Output('edit_mid', 'value'), 
      Output('edit_last', 'value'), Output('edit_cc', 'value'), Output('edit_street', 'value'), 
      Output('edit_city', 'value'), Output('edit_state', 'value'), Output('edit_country', 'value'), 
@@ -263,15 +263,31 @@ def update_details(first, middle, last, start_date, end_date):
 # update customer details based on user input - *NEED TO CONVERT @app.callback -> @dash.callback FOR MULTI-PAGE FUNCTIONALITY*
 @dash.callback(
     Output('output', 'children'),
-    [Input('data_store', 'data'), Input('edit_first', 'value'), Input('edit_mid', 'value'), Input('edit_last', 'value'), Input('edit_cc', 'value'), 
+    [Input('ssn', 'data'), Input('edit_first', 'value'), Input('edit_mid', 'value'), Input('edit_last', 'value'), Input('edit_cc', 'value'), 
      Input('edit_street', 'value'), Input('edit_city', 'value'), Input('edit_state', 'value'), Input('edit_country', 'value'), 
      Input('edit_zip', 'value'), Input('edit_phone', 'value'), Input('edit_email', 'value'), Input('Submit', 'n_clicks')]
 )
-def submit_form(data, edit_first, edit_mid, edit_last, edit_cc, edit_street, edit_city, 
+def submit_form(ssn, edit_first, edit_mid, edit_last, edit_cc, edit_street, edit_city, 
                 edit_state, edit_country, edit_zip, edit_phone, edit_email, n_clicks):
-
+    
     if n_clicks > 0:
+        # update MariaDB
         update_customer_data(edit_first, edit_mid, edit_last, edit_cc, edit_street, edit_city, 
-                             edit_state, edit_country, edit_zip, edit_phone, edit_email, data)
+                             edit_state, edit_country, edit_zip, edit_phone, edit_email, ssn)
+
+        # update customer's dataframe (so don't need to restart flask server in order to view the latest changes in database)
+        customer = customer_df['SSN'] == ssn
+
+        customer_df.loc[customer, 'FIRST_NAME'] = edit_first
+        customer_df.loc[customer, 'MIDDLE_NAME'] = edit_mid
+        customer_df.loc[customer, 'LAST_NAME'] = edit_last
+        customer_df.loc[customer, 'CREDIT_CARD_NO'] = edit_cc
+        customer_df.loc[customer, 'FULL_STREET_ADDRESS'] = edit_street
+        customer_df.loc[customer, 'CITY'] = edit_city
+        customer_df.loc[customer, 'STATE'] = edit_state
+        customer_df.loc[customer, 'COUNTRY'] = edit_country
+        customer_df.loc[customer, 'ZIP'] = edit_zip
+        customer_df.loc[customer, 'PHONE'] = edit_phone
+        customer_df.loc[customer, 'EMAIL'] = edit_email
 
     return ''

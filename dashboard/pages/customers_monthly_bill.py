@@ -1,6 +1,10 @@
 import numpy as np
 import pandas as pd
 
+import mysql.connector as mariadb
+from dotenv import load_dotenv              # environment variables
+import os
+
 from datetime import datetime
 
 import dash
@@ -8,10 +12,130 @@ from dash import Dash, dash_table, dcc, html, Input, Output
 #----------------------------------------------------------------------------------------------------------
 # 1. Used to generate a monthly bill for a credit card number for a given month and year.
 #----------------------------------------------------------------------------------------------------------
+# load the environment variables
+load_dotenv()
+
+# assign environment variables
+PASSWORD = os.getenv('MariaDB_Password')
+USER = os.getenv('MariaDB_Username')
+
+# functions: get data + update data
+def get_customer_data():
+    try:
+        # establish connection to MariaDB
+        con = mariadb.connect(
+            host='localhost',
+            user=USER,
+            password=PASSWORD,
+            database='creditcard_capstone'
+        )
+
+        # create a cursor
+        cur = con.cursor()
+        # SQL statement
+        query = ''' 
+        SELECT *
+        FROM cdw_sapp_customer
+        '''
+        # execute SQL statement
+        cur.execute(query)
+
+        # convert results to pandas dataframe
+        customer_df = pd.DataFrame(cur, columns=['SSN', 
+                                                 'FIRST_NAME', 
+                                                 'MIDDLE_NAME', 
+                                                 'LAST_NAME', 
+                                                 'CREDIT_CARD_NO', 
+                                                 'FULL_STREET_ADDRESS', 
+                                                 'CUST_CITY', 
+                                                 'CUST_STATE', 
+                                                 'CUST_COUNTRY', 
+                                                 'CUST_ZIP', 
+                                                 'CUST_PHONE', 
+                                                 'CUST_EMAIL', 
+                                                 'LAST_UPDATED'])
+        # close connection to MariaDB
+        con.close()
+
+        return customer_df
+    except mariadb.ERROR as err:
+        print(err)
+
+def get_credit_data():
+    try:
+        # establish connection to MariaDB
+        con = mariadb.connect(
+            host='localhost',
+            user=USER,
+            password=PASSWORD,
+            database='creditcard_capstone'
+        )
+
+        # create a cursor
+        cur = con.cursor()
+        # SQL statement
+        query = ''' 
+        SELECT *
+        FROM cdw_sapp_credit_card
+        '''
+        # execute SQL statement
+        cur.execute(query)
+
+        # convert results to pandas dataframe
+        credit_df = pd.DataFrame(cur, columns=['CUST_CC_NO', 
+                                               'TIMEID', 
+                                               'CUST_SSN', 
+                                               'BRANCH_CODE',
+                                               'TRANSACTION_TYPE', 
+                                               'TRANSACTION_VALUE', 
+                                               'TRANSACTION_ID'])
+        # close connection to MariaDB
+        con.close()
+
+        return credit_df
+    except mariadb.ERROR as err:
+        print(err)
+
+def get_branch_data():
+    try:
+        # establish connection to MariaDB
+        con = mariadb.connect(
+            host='localhost',
+            user=USER,
+            password=PASSWORD,
+            database='creditcard_capstone'
+        )
+
+        # create a cursor
+        cur = con.cursor()
+        # SQL statement
+        query = ''' 
+        SELECT *
+        FROM cdw_sapp_branch
+        '''
+        # execute SQL statement
+        cur.execute(query)
+
+        # convert results to pandas dataframe
+        branch_df = pd.DataFrame(cur, columns=['BRANCH_CODE', 
+                                               'BRANCH_NAME', 
+                                               'BRANCH_STREET', 
+                                               'BRANCH_CITY',
+                                               'BRANCH_STATE', 
+                                               'BRANCH_ZIP', 
+                                               'BRANCH_PHONE', 
+                                               'LAST_UPDATED'])
+        # close connection to MariaDB
+        con.close()
+
+        return branch_df
+    except mariadb.ERROR as err:
+        print(err)
+#----------------------------------------------------------------------------------------------------------
 # read cleaned data
-branch_df = pd.read_csv('cleaned_files/cleaned_branch.csv')
-customer_df = pd.read_csv('cleaned_files/cleaned_customer.csv')
-credit_card_df = pd.read_csv('cleaned_files/cleaned_credit.csv')
+branch_df = get_branch_data()
+customer_df = get_customer_data()
+credit_card_df = get_credit_data()
 credit_card_df.rename(columns={'CUST_SSN':'SSN'}, inplace=True)
 
 # merge both dataframes
@@ -153,7 +277,7 @@ def update_bill(cc, month, year):
             return ['(Please enter only numbers)','', '', '', '', '', '', '', '', '', '', '', '', '', None]
         else:
             # filter by credit card number
-            cc_transactions = merged_df['CREDIT_CARD_NO'] == int(cc)
+            cc_transactions = merged_df['CREDIT_CARD_NO'] == cc
             if merged_df[cc_transactions].empty:
                 return ['(No credit card found with this number...please try again)','', '', '', '', '', '', '', '', '', '', '', '', '', None]
             
@@ -184,7 +308,7 @@ def update_bill(cc, month, year):
             rewards = new_balance * 0.02
             credit_limit = 10000
             available_credit = credit_limit - new_balance
-
+            
             # select 1 row to collect customer details + bank details
             target_row = filtered_merged_df.iloc[0]
             name = f'{target_row["FIRST_NAME"]} {target_row["LAST_NAME"]}' 

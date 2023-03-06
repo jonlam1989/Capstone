@@ -1,6 +1,10 @@
 import numpy as np
 import pandas as pd
 
+import mysql.connector as mariadb
+from dotenv import load_dotenv              # environment variables
+import os
+
 import dash
 from dash import Dash, dash_table, dcc, html, Input, Output
 #----------------------------------------------------------------------------------------------------------
@@ -9,12 +13,95 @@ from dash import Dash, dash_table, dcc, html, Input, Output
 # 2. Used to display the number and total values of transactions for a given type.
 # 3. Used to display the number and total values of transactions for branches in a given state.
 #----------------------------------------------------------------------------------------------------------
+# load the environment variables
+load_dotenv()
+
+# assign environment variables
+PASSWORD = os.getenv('MariaDB_Password')
+USER = os.getenv('MariaDB_Username')
+
+def get_customer_data():
+    try:
+        # establish connection to MariaDB
+        con = mariadb.connect(
+            host='localhost',
+            user=USER,
+            password=PASSWORD,
+            database='creditcard_capstone'
+        )
+
+        # create a cursor
+        cur = con.cursor()
+        # SQL statement
+        query = ''' 
+        SELECT *
+        FROM cdw_sapp_customer
+        '''
+        # execute SQL statement
+        cur.execute(query)
+
+        # convert results to pandas dataframe
+        customer_df = pd.DataFrame(cur, columns=['SSN', 
+                                                 'FIRST_NAME', 
+                                                 'MIDDLE_NAME', 
+                                                 'LAST_NAME', 
+                                                 'CREDIT_CARD_NO', 
+                                                 'FULL_STREET_ADDRESS', 
+                                                 'CUST_CITY', 
+                                                 'CUST_STATE', 
+                                                 'CUST_COUNTRY', 
+                                                 'CUST_ZIP', 
+                                                 'CUST_PHONE', 
+                                                 'CUST_EMAIL', 
+                                                 'LAST_UPDATED'])
+        # close connection to MariaDB
+        con.close()
+
+        return customer_df
+    except mariadb.ERROR as err:
+        print(err)
+
+def get_credit_data():
+    try:
+        # establish connection to MariaDB
+        con = mariadb.connect(
+            host='localhost',
+            user=USER,
+            password=PASSWORD,
+            database='creditcard_capstone'
+        )
+
+        # create a cursor
+        cur = con.cursor()
+        # SQL statement
+        query = ''' 
+        SELECT *
+        FROM cdw_sapp_credit_card
+        '''
+        # execute SQL statement
+        cur.execute(query)
+
+        # convert results to pandas dataframe
+        credit_df = pd.DataFrame(cur, columns=['CUST_CC_NO', 
+                                               'TIMEID', 
+                                               'CUST_SSN', 
+                                               'BRANCH_CODE',
+                                               'TRANSACTION_TYPE', 
+                                               'TRANSACTION_VALUE', 
+                                               'TRANSACTION_ID'])
+        # close connection to MariaDB
+        con.close()
+
+        return credit_df
+    except mariadb.ERROR as err:
+        print(err)
+#----------------------------------------------------------------------------------------------------------
 # read cleaned data + filter for only the SSN (need this to merge dataframes) and CUST_ZIP
-customer_df = pd.read_csv('cleaned_files/cleaned_customer.csv')
+customer_df = get_customer_data()
 customer_df = customer_df[['SSN', 'CUST_ZIP', 'CUST_STATE']]
 
 # read cleaned data + rename column (need this to merge dataframes)
-credit_card_df = pd.read_csv('cleaned_files/cleaned_credit.csv')
+credit_card_df = get_credit_data()
 credit_card_df.rename(columns={'CUST_SSN':'SSN'}, inplace=True)
 
 # merge both dataframes
@@ -50,7 +137,7 @@ dash.register_page(__name__, path='/')
 
 layout = html.Main([
     html.Div([
-        html.H2('Customer Transactions'),
+        html.H2('All Customer Transactions'),
         html.Div([
             html.Section([
                 dash_table.DataTable(merged_df.to_dict('records'),          # https://dash.plotly.com/datatable

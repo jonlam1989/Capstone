@@ -211,9 +211,9 @@ layout = html.Main([
 def update_details(first, middle, last, start_date, end_date):
     if first and middle and last:
         # change everything to lowercase for case-insensitivity
-        first_name = customer_df['FIRST_NAME'].str.lower() == first.lower()
-        middle_name = customer_df['MIDDLE_NAME'].str.lower() == middle.lower()
-        last_name = customer_df['LAST_NAME'].str.lower() == last.lower()
+        first_name = customer_df['FIRST_NAME'].str.lower() == first.lower().strip()
+        middle_name = customer_df['MIDDLE_NAME'].str.lower() == middle.lower().strip()
+        last_name = customer_df['LAST_NAME'].str.lower() == last.lower().strip()
 
         # find customer based on full name in customer_df
         target_customer_df = customer_df[first_name & middle_name & last_name]
